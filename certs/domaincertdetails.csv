@@ -1,0 +1,7 @@
+domain_name,certfilename
+www.example.com,sample_cert1.pem
+www.learning.com,sample_cert2.pem
+www.teaching.com,sample_cert3.pem
+www.8x8.app.cloud.com,sample_cert4.pem
+www.8x8.learning.cloud.com,sample_cert5.pem
+www.8x8.kadiri.cloud.com,sample_cert6.pem

@@ -21,17 +21,10 @@ global-exclude *.py[cod] __pycache__/* *.so *.dylib
 # added by check_manifest.py
 recursive-include src *.py
 
+recursive-include certs *.pem *.crt *.csv
+
 # added by check_manifest.py
 include Dockerfile
 
 # added by check_manifest.py
 include *.md
-
-# added by check_manifest.py
-recursive-include examples *.pem
-
-# added by check_manifest.py
-include *.txt
-
-# added by check_manifest.py
-include *.png

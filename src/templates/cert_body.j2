@@ -1,0 +1,8 @@
+{
+"cert_body":
+{
+  {% for k,v in certbody.items() %}
+	"{{ k }}" : "{{ v }}",             
+  {% endfor %}
+}
+}

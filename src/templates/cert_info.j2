@@ -1,0 +1,13 @@
+{
+"cert_info":
+{	
+      {% for k,v in certinfo.items() %}
+      "{{ k }}":
+       {
+          {% for i,j in v.items() %}
+	      "{{ i }}" : "{{ j }}",
+          {% endfor %}
+       },
+      {% endfor %}
+}
+}
