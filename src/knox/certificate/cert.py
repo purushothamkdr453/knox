@@ -64,7 +64,7 @@ class Cert(StoreObject):
             super().__init__(name=self._common_name, path=self.store_path(), body=self._body, info=self._info)
         else:
             self._common_name = common_name
-            super().__init__(name=self._common_name, path="/client", body=self._body, info=self._info)
+            super().__init__(name=self._common_name, path=self._settings.VAULT_CLIENT_CERTPATH, body=self._body, info=self._info)
         self._jinja = Environment(loader=FileSystemLoader('templates'))
         self._tmpl_body = self._jinja.get_template('body_template.js')
         self._tmpl_info = self._jinja.get_template('info_template.js')
@@ -97,9 +97,9 @@ class Cert(StoreObject):
              self.name = self.valid_name(self._common_name)
              """Ensure path is the inverse of the true cert common name"""
              self.path = self.store_path()
-        else:
-             self.name = self._common_name
-             self.path = "/client"
+         else:
+             self.name = self.valid_name(self._data['cert_info']['subject']['commonName'])
+             self.path = self._settings.VAULT_CLIENT_CERTPATH
 
         self.type = Cert.PEM.name
 

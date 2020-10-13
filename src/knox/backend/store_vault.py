@@ -25,7 +25,7 @@ from loguru import logger
 
 from .store_engine import StoreEngine
 from .store_object import StoreObject
-
+import validators
 
 class VaultClient:
     """Client commands not available via hvac"""
@@ -363,5 +363,8 @@ class VaultStoreEngine(StoreEngine):
 
             :return: list
         """
-        searchpath = '/'.join(reversed(pattern.strip('/*').split('.'))) + "/"
-        return self.__client.search(rootpath=searchpath, rootkey="", searchresults=[])
+        if validators.domain(pattern):
+           searchpath = '/'.join(reversed(pattern.strip('/*').split('.'))) + "/"
+           return self.__client.search(rootpath=searchpath, rootkey="", searchresults=[])
+        else:
+           return self.__client.search(rootpath=self._settings.VAULT_CLIENT_CERTPATH+"/", rootkey="", searchresults=[])
