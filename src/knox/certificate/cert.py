@@ -166,6 +166,7 @@ class Cert(StoreObject):
         }, indent=8)
 
     def check_cert_validity(self) -> bool:
+        """Check certificate validity period"""
         cert = self._x509
         if cert.not_valid_after < datetime.datetime.now():
             logger.error("Certificate is already expired.Try uploading unexpired certificate")
