@@ -104,7 +104,8 @@ def save(ctx, name):
                      key=key,
                      chain=chain,
                      certtype=certtype)
-    knox.store.save(certificate)
+    if certificate.check_cert_validity():
+        knox.store.save(certificate)
 
 
 @cert.command(no_args_is_help=True)
