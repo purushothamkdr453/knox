@@ -18,6 +18,7 @@ import ast
 import enum
 import json
 from binascii import hexlify
+import datetime
 
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
@@ -190,6 +191,15 @@ class Cert(StoreObject):
             'serial_number': f'{cert.serial_number}',
             'key': key_info
         }, indent=8)
+
+    def check_cert_validity(self) -> bool:
+        cert = self._x509
+        if cert.not_valid_after < datetime.datetime.now():
+            logger.error("Certificate is already expired.Try uploading unexpired certificate")
+            return False
+        else:
+            logger.info("Certificate is valid..proceeding with upload")
+            return True
 
     @staticmethod
     def to_store_path(common_name: str) -> str:
