@@ -192,15 +192,12 @@ class Cert(StoreObject):
             'key': key_info
         }, indent=8)
 
-    def check_cert_validity(self) -> bool:
+    def isValid(self) -> bool:
         """Check certificate validity period"""
-        cert = self._x509
-        if cert.not_valid_after < datetime.datetime.now():
-            logger.error("Certificate is already expired.Try uploading unexpired certificate")
-            return False
-        else:
-            logger.info("Certificate is valid..proceeding with upload")
-            return True
+        logger.trace(f'Is the date within the validity dates?\n\tNot valid after: {self._x509.not_valid_after}'
+                     f'\n\tNow: {datetime.datetime.now()}'
+                     f'\n\tNot valid before {self._x509.not_valid_before}')
+        return self._x509.not_valid_after > datetime.datetime.now() > self._x509.not_valid_before
 
     @staticmethod
     def to_store_path(common_name: str) -> str:

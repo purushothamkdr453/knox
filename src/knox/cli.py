@@ -106,8 +106,11 @@ def cert_save(ctx, name):
                      key=key,
                      chain=chain,
                      certtype=certtype)
-    if certificate.check_cert_validity():
+    if certificate.isValid():
         knox.store.save(certificate)
+    else:
+        logger.error(f'{certificate.name} is invalid. Check validity Dates:\n {certificate.info()}')
+        sys.exit(2)
 
 
 @cert.command(name="get", no_args_is_help=True)
