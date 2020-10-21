@@ -40,6 +40,8 @@ class Cert(StoreObject):
     _body: str  #: String representation of private, chain and public portions of certificate as a map/json
     _info: str  #: Certificate details
     _data: {}   #: Combined body and info map
+    _policy: str
+    _mount: str
     _file: object
     _x509: x509
     _common_name: str
@@ -71,6 +73,7 @@ class Cert(StoreObject):
         self._tmpl_body = self._jinja.get_template('body_template.js')
         self._tmpl_info = self._jinja.get_template('info_template.js')
         self._tmpl_data = self._jinja.get_template('data_template.js')
+        self._tmpl_policy = self._jinja.get_template('policy_template.js')
 
     def load_x509(self, path: str) -> None:
         """Given path to PEM x509 read in certificate
@@ -101,6 +104,11 @@ class Cert(StoreObject):
         """Ensure path is the inverse of the true cert common name"""
         self.path = self.store_path()
 
+    def policy(self) -> str:
+        self._mount = self._settings['KNOX_VAULT_MOUNT']
+        self._policy = self._tmpl_policy.render(mount=self._mount, path=self.store_path())
+        return self._policy
+
     def load(self, pub: str, key: str, certtype: enum.Enum = PEM, chain: str = None) -> None:
         """Read in components of a certificate, given filename paths for each
 
@@ -124,6 +132,8 @@ class Cert(StoreObject):
                 self._body['cert_body']['chain'] = chain_fp.read()
 
         self._data['cert_body'] = self._body['cert_body']
+        self._data['cert_policy'] = self.policy()
+
 
     @classmethod
     def valid_name(cls, value: str) -> str:
