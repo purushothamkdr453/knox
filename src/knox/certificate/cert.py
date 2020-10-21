@@ -65,6 +65,7 @@ class Cert(StoreObject):
         """Constructor for Cert"""
         self._settings = settings
         self._common_name = self.valid_name(common_name)
+        self._mount = self._settings['KNOX_VAULT_MOUNT']
         self._body = ""
         self._info = ""
         self._type = ""
@@ -104,9 +105,12 @@ class Cert(StoreObject):
         """Ensure path is the inverse of the true cert common name"""
         self.path = self.store_path()
 
+    @property
+    def mount(self) -> str:
+        return self._mount
+
     def policy(self) -> str:
-        self._mount = self._settings['KNOX_VAULT_MOUNT']
-        self._policy = self._tmpl_policy.render(mount=self._mount, path=self.store_path())
+        self._policy = self._tmpl_policy.render(cert=self)
         return self._policy
 
     def load(self, pub: str, key: str, certtype: enum.Enum = PEM, chain: str = None) -> None:
@@ -133,7 +137,6 @@ class Cert(StoreObject):
 
         self._data['cert_body'] = self._body['cert_body']
         self._data['cert_policy'] = self.policy()
-
 
     @classmethod
     def valid_name(cls, value: str) -> str:

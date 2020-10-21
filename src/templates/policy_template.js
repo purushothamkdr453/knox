@@ -1,6 +1,6 @@
-path "{{mount}}/data{{path}}/cert_body" {
+path "{{cert.mount}}/data{{cert.path}}/{{cert.name}}/{{cert.type}}/cert_body" {
   capabilities = [ "read" ]
 }
-path "{{mount}}/data{{path}}/cert_info" {
+path "{{cert.mount}}/data{{cert.path}}/{{cert.name}}/{{cert.type}}/cert_info" {
   capabilities = [ "read" ]
 }
